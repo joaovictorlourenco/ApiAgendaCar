@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Definição do modelo de usuário
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Definição do modelo de serviço
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  value       Float
+  customer    Customer @relation(fields: [customerId], references: [id])
+  vehicle     Vehicle  @relation(fields: [vehiclesId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  customerId  String
+  vehiclesId  String
+
+  @@map("services")
+}
+
+// Definição do modelo de cliente
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  celphone  String    @unique
+  cpf       String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  vehicles  Vehicle[]
+  Service   Service[]
+
+  @@map("customers")
+}
+
+// Definição do modelo de veículo
+model Vehicle {
+  id         String    @id @default(cuid())
+  type       String
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  customerId String
+  Service    Service[]
+
+  @@map("vehicles")
+}
