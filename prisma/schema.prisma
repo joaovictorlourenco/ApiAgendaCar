@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -27,16 +28,16 @@ model User {
 
 // Definição do modelo de serviço
 model Service {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   description String
   value       Float
-  customer    Customer @relation(fields: [customerId], references: [id])
-  vehicle     Vehicle  @relation(fields: [vehiclesId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  customerId  String
-  vehiclesId  String
+  customerId  String?
+  vehiclesId  String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  customer    Customer? @relation(fields: [customerId], references: [id])
+  vehicle     Vehicle?  @relation(fields: [vehiclesId], references: [id])
 
   @@map("services")
 }
@@ -45,11 +46,10 @@ model Service {
 model Customer {
   id        String    @id @default(cuid())
   name      String
-  celphone  String    @unique
+  cellphone String    @unique
   cpf       String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  vehicles  Vehicle[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   Service   Service[]
 
   @@map("customers")
@@ -57,13 +57,19 @@ model Customer {
 
 // Definição do modelo de veículo
 model Vehicle {
-  id         String    @id @default(cuid())
-  type       String
-  customer   Customer  @relation(fields: [customerId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  customerId String
-  Service    Service[]
+  id        String      @id @default(uuid())
+  type      VehicleType
+  brand     String
+  model     String
+  year      Int
+  createdAt DateTime?   @default(now())
+  updatedAt DateTime?   @updatedAt
+  services  Service[]
 
   @@map("vehicles")
+}
+
+enum VehicleType {
+  car
+  moto
 }
