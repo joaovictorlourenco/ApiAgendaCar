@@ -7,7 +7,7 @@ export class VehicleService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: VehicleDto) {
-    const vehicle = await this.prisma.vehicle.create({
+    const vehicle = await this.prisma.vehicles.create({
       data: {
         ...data,
       },
@@ -21,11 +21,11 @@ export class VehicleService {
   }
 
   findAll() {
-    return this.prisma.vehicle.findMany();
+    return this.prisma.vehicles.findMany();
   }
 
   findOne(id: string) {
-    const vehicle = this.prisma.vehicle.findUnique({
+    const vehicle = this.prisma.vehicles.findUnique({
       where: {
         id,
       },
@@ -39,7 +39,7 @@ export class VehicleService {
   }
 
   update(data: VehicleDto, id: string) {
-    const vehicle = this.prisma.vehicle.update({
+    const vehicle = this.prisma.vehicles.update({
       data: {
         ...data,
       },
@@ -52,7 +52,7 @@ export class VehicleService {
   }
 
   delete(id: string) {
-    const vehicle = this.prisma.vehicle.delete({
+    const vehicle = this.prisma.vehicles.delete({
       where: {
         id,
       },

@@ -8,7 +8,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(email: string): Promise<UsersDto | null | undefined> {
-    return this.prisma.user.findUnique({
+    return this.prisma.users.findUnique({
       where: {
         email,
       },
@@ -24,7 +24,7 @@ export class UsersService {
 
     const hashedPassword = await hash(data.password, 10);
 
-    return this.prisma.user.create({
+    return this.prisma.users.create({
       data: {
         ...data,
         password: hashedPassword,

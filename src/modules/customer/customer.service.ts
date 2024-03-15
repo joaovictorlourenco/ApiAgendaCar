@@ -10,7 +10,7 @@ export class CustomerService {
     const { cellphone, cpf } = data;
 
     // Verifica se existe antes de criar
-    const existingCustomer = await this.prisma.customer.findFirst({
+    const existingCustomer = await this.prisma.customers.findFirst({
       where: {
         OR: [{ cellphone: { equals: cellphone } }, { cpf: { equals: cpf } }],
       },
@@ -20,7 +20,7 @@ export class CustomerService {
       throw new BadRequestException('Cellphone or CPF already exists');
     }
 
-    const customer = await this.prisma.customer.create({
+    const customer = await this.prisma.customers.create({
       data,
     });
 
@@ -31,7 +31,7 @@ export class CustomerService {
     return customer;
   }
   async update(data: CustomerDto, id: string) {
-    const customer = await this.prisma.customer.update({
+    const customer = await this.prisma.customers.update({
       data: {
         ...data,
       },
@@ -44,11 +44,11 @@ export class CustomerService {
   }
 
   async findAll() {
-    return this.prisma.customer.findMany();
+    return this.prisma.customers.findMany();
   }
 
   async findOne(id: string) {
-    const customer = await this.prisma.customer.findUnique({
+    const customer = await this.prisma.customers.findUnique({
       where: {
         id,
       },
@@ -62,7 +62,7 @@ export class CustomerService {
   }
 
   async delete(id: string) {
-    const customer = await this.prisma.customer.delete({
+    const customer = await this.prisma.customers.delete({
       where: {
         id,
       },

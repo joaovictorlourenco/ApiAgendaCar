@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -14,59 +7,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Definição do modelo de usuário
-model User {
-  id        String   @id @default(cuid())
+model customers {
+  id        String     @id @default(cuid())
   name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("users")
+  cpf       String     @unique
+  cellphone String     @unique
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime?  @updatedAt
+  services  services[]
 }
 
-// Definição do modelo de serviço
-model Service {
-  id          String    @id @default(cuid())
+model services {
+  id          String     @id @default(cuid())
   name        String
   description String
   value       Float
   customerId  String?
   vehiclesId  String?
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @updatedAt
-  customer    Customer? @relation(fields: [customerId], references: [id])
-  vehicle     Vehicle?  @relation(fields: [vehiclesId], references: [id])
-
-  @@map("services")
+  createdAt   DateTime?  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  customers   customers? @relation(fields: [customerId], references: [id])
+  vehicles    vehicles?  @relation(fields: [vehiclesId], references: [id])
 }
 
-// Definição do modelo de cliente
-model Customer {
+model users {
   id        String    @id @default(cuid())
   name      String
-  cellphone String    @unique
-  cpf       String    @unique
+  email     String    @unique
+  password  String
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  Service   Service[]
-
-  @@map("customers")
 }
 
-// Definição do modelo de veículo
-model Vehicle {
-  id        String      @id @default(uuid())
+model vehicles {
+  id        String      @id @default(cuid())
   type      VehicleType
   brand     String
   model     String
   year      Int
   createdAt DateTime?   @default(now())
   updatedAt DateTime?   @updatedAt
-  services  Service[]
-
-  @@map("vehicles")
+  services  services[]
 }
 
 enum VehicleType {

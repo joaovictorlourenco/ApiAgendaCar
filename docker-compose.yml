@@ -11,19 +11,18 @@ services:
       - POSTGRES_DB=main
     volumes:
       - postgres_data:/bitnami/postgresql
-
-  app: 
-    build: 
-      context: .
-      dockerfile: dockerfile
-    container_name: nest-docker-postgres
-    ports:
-      - '3000:3000'
-    depends_on:
-      - postgres
-    volumes:
-      - .:/app
-      - /usr/app/node_modules
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   container_name: nest-docker-postgres
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - .:/app
+  #     - /usr/app/node_modules
 
 volumes:
   postgres_data:

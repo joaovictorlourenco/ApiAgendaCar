@@ -7,11 +7,11 @@ export class ServiceService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: serviceDto) {
-    const service = await this.prisma.service.create({
+    const service = await this.prisma.services.create({
       data,
       include: {
-        vehicle: true,
-        customer: true,
+        vehicles: true,
+        customers: true,
       },
     });
 
@@ -19,7 +19,7 @@ export class ServiceService {
   }
 
   async update(data: serviceDto, id: string) {
-    const service = await this.prisma.service.update({
+    const service = await this.prisma.services.update({
       data: {
         ...data,
       },
@@ -32,17 +32,17 @@ export class ServiceService {
   }
 
   async findAll() {
-    return this.prisma.service.findMany();
+    return this.prisma.services.findMany();
   }
 
   async findOne(id: string) {
-    const service = await this.prisma.service.findUnique({
+    const service = await this.prisma.services.findUnique({
       where: {
         id,
       },
       include: {
-        vehicle: true,
-        customer: true,
+        vehicles: true,
+        customers: true,
       },
     });
 
@@ -54,7 +54,7 @@ export class ServiceService {
   }
 
   async delete(id: string) {
-    const service = await this.prisma.service.delete({
+    const service = await this.prisma.services.delete({
       where: {
         id,
       },

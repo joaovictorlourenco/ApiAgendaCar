@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsDateString } from 'class-validator';
+import { IsString, IsEmail } from 'class-validator';
 
 export class UsersDto {
   @IsString()
@@ -13,9 +13,4 @@ export class UsersDto {
   @IsString()
   password: string;
 
-  @IsDateString()
-  createdAt?: Date;
-
-  @IsDateString()
-  updatedAt?: Date;
 }
