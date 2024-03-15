@@ -29,10 +29,21 @@ export class AuthService {
   }
 
   async login(user: UsersDto) {
-    const payload = {
-      email: user.email,
-      sub: user.id,
-    };
+    const { email, password } = user;
+
+    const userFound = await this.usersService.findOne(email);
+
+    if (!userFound) {
+      return new BadRequestException('User not found');
+    }
+
+    const isPasswordMatching = await compare(password, userFound.password);
+
+    if (!isPasswordMatching) {
+      return new BadRequestException('Invalid credentials');
+    }
+
+    const payload = { email: userFound.email, sub: userFound.id };
 
     return {
       access_token: this.jwtService.sign(payload),

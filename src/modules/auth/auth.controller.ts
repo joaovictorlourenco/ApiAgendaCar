@@ -14,8 +14,7 @@ export class AuthController {
   async login(@Body() req: any) {
     return this.authService.login(req);
   }
-
-  @UseGuards(JwtAuthGuard)
+  @Public()
   @Post('register')
   async register(@Body() req: any) {
     return this.authService.register(req);
