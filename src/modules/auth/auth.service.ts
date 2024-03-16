@@ -41,7 +41,7 @@ export class AuthService {
 
     if (!isPasswordMatching) {
       return new BadRequestException('Invalid credentials');
-    }
+    }  
 
     const payload = { email: userFound.email, sub: userFound.id };
 
