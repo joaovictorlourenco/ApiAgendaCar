@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConsoleLogger, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
-import { UsersDto } from '../users/dto/users.dto';
+import { CreateUserDto, UsersDto } from '../users/dto/users.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +41,7 @@ export class AuthService {
 
     if (!isPasswordMatching) {
       return new BadRequestException('Invalid credentials');
-    }  
+    }
 
     const payload = { email: userFound.email, sub: userFound.id };
 
@@ -50,7 +50,9 @@ export class AuthService {
     };
   }
 
-  async register(user: any) {
-    return this.usersService.create(user);
+  async register(user: CreateUserDto) {
+    const response = await this.usersService.create(user);
+
+    return response;
   }
 }
