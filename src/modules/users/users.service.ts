@@ -7,8 +7,25 @@ import { hash } from 'bcryptjs';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  async findAll() {
+    return this.prisma.users.findMany();
+  }
+
   async findOne(email: string): Promise<UsersDto | null | undefined> {
     return this.prisma.users.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.users.findUnique({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
       where: {
         email,
       },

@@ -55,4 +55,20 @@ export class AuthService {
 
     return response;
   }
+
+  async validateToken(data: any) {
+    try {
+      const decoded = this.jwtService.verify(data['token']);
+
+      const currentDate = new Date().getTime() / 1000;
+
+      if (decoded.exp < currentDate) {
+        return { isAuth: false };
+      }
+
+      return { isAuth: true };
+    } catch (e) {
+      return { isAuth: false };
+    }
+  }
 }

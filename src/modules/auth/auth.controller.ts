@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Headers, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
 import { Public } from '../../decorator/public.decorator';
 import { CreateUserDto, UsersDto } from '../users/dto/users.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -21,9 +20,10 @@ export class AuthController {
     return this.authService.register(req);
   }
 
+  @Public()
   @UseGuards(JwtAuthGuard)
-  @Get('validate-token')
-  async validateToken(@Req() req: Request) {
-    return this.authService.validateToken(req);
+  @Post('validateToken')
+  async validateToken(@Body() data: any) {
+    return this.authService.validateToken(data);
   }
 }

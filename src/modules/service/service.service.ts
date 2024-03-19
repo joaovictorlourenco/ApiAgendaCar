@@ -32,7 +32,12 @@ export class ServiceService {
   }
 
   async findAll() {
-    return this.prisma.services.findMany();
+    return this.prisma.services.findMany({
+      include: {
+        vehicles: true,
+        customers: true,
+      },
+    });
   }
 
   async findOne(id: string) {
