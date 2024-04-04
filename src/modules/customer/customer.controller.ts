@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CustomerDto } from './dto/customer.dto';
@@ -37,5 +38,10 @@ export class CustomerController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.customerService.delete(id);
+  }
+
+  @Get('filter/:search')
+  async search(@Param('search') search: string) {
+    return this.customerService.search(search);
   }
 }

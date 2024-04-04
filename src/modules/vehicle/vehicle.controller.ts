@@ -34,6 +34,11 @@ export class VehicleController {
     return this.vehicleService.findAll();
   }
 
+  @Get('filter/:search')
+  async search(@Param('search') search: string) {
+    return this.vehicleService.search(search);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.vehicleService.findOne(id);

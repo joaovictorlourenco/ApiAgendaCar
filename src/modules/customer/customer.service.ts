@@ -70,4 +70,33 @@ export class CustomerService {
 
     return { message: 'Customer removed' };
   }
+
+  async search(search: string) {
+    const customers = await this.prisma.customers.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            cpf: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            cellphone: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    });
+
+    return customers;
+  }
 }

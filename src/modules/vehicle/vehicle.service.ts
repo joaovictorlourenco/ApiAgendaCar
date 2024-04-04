@@ -20,12 +20,12 @@ export class VehicleService {
     return vehicle;
   }
 
-  findAll() {
-    return this.prisma.vehicles.findMany();
+  async findAll() {
+    return await this.prisma.vehicles.findMany();
   }
 
-  findOne(id: string) {
-    const vehicle = this.prisma.vehicles.findUnique({
+  async findOne(id: string) {
+    const vehicle = await this.prisma.vehicles.findUnique({
       where: {
         id,
       },
@@ -38,8 +38,8 @@ export class VehicleService {
     return vehicle;
   }
 
-  update(data: VehicleDto, id: string) {
-    const vehicle = this.prisma.vehicles.update({
+  async update(data: VehicleDto, id: string) {
+    const vehicle = await this.prisma.vehicles.update({
       data: {
         ...data,
       },
@@ -51,13 +51,58 @@ export class VehicleService {
     return vehicle;
   }
 
-  delete(id: string) {
-    const vehicle = this.prisma.vehicles.delete({
+  async delete(id: string) {
+    const vehicle = await this.prisma.vehicles.delete({
       where: {
         id,
       },
     });
 
     return { message: 'Vehicle removed' };
+  }
+
+  async search(search: string) {
+    if (Number.isNaN(parseInt(search))) {
+      const vehicle = await this.prisma.vehicles.findMany({
+        where: {
+          OR: [
+            {
+              model: {
+                contains: search,
+              },
+            },
+            {
+              brand: {
+                contains: search,
+              },
+            },
+          ],
+        },
+      });
+
+      if (!vehicle) {
+        throw new BadRequestException('Vehicle not found');
+      }
+
+      return vehicle;
+    }
+
+    const vehicle = await this.prisma.vehicles.findMany({
+      where: {
+        OR: [
+          {
+            year: {
+              equals: parseInt(search),
+            },
+          },
+        ],
+      },
+    });
+
+    if (!vehicle) {
+      throw new BadRequestException('Vehicle not found');
+    }
+
+    return vehicle;
   }
 }

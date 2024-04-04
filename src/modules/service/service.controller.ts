@@ -29,6 +29,11 @@ export class ServiceController {
     return this.serviceService.delete(id);
   }
 
+  @Get('filter/:search')
+  async search(@Param('search') search: string) {
+    return this.serviceService.search(search);
+  }
+
   @Get()
   async findAll() {
     return this.serviceService.findAll();

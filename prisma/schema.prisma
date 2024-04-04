@@ -11,9 +11,9 @@ model customers {
   id        String     @id @default(cuid())
   name      String
   cpf       String     @unique
-  cellphone String     @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
+  cellphone String     @unique
   services  services[]
 }
 
@@ -22,32 +22,39 @@ model services {
   name        String
   description String
   value       Float
-  customerId  String?
-  vehiclesId  String?
   createdAt   DateTime?  @default(now())
   updatedAt   DateTime?  @updatedAt
+  customerId  String?
+  vehiclesId  String?
   customers   customers? @relation(fields: [customerId], references: [id])
   vehicles    vehicles?  @relation(fields: [vehiclesId], references: [id])
 }
 
 model users {
-  id        String    @id @default(cuid())
+  id        String   @id @default(cuid())
   name      String
-  email     String    @unique
+  email     String   @unique
   password  String
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model vehicles {
   id        String      @id @default(cuid())
+  createdAt DateTime?   @default(now())
+  updatedAt DateTime?   @updatedAt
   type      VehicleType
   brand     String
   model     String
   year      Int
-  createdAt DateTime?   @default(now())
-  updatedAt DateTime?   @updatedAt
   services  services[]
+}
+
+model year {
+  id        String    @id
+  year      Decimal   @db.Decimal
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
 }
 
 enum VehicleType {

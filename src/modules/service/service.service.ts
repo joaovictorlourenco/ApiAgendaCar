@@ -67,4 +67,25 @@ export class ServiceService {
 
     return { message: 'Service removed' };
   }
+
+  async search(search: string) {
+    const services = await this.prisma.services.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+            },
+          },
+          {
+            description: {
+              contains: search,
+            },
+          },
+        ],
+      },
+    });
+
+    return services;
+  }
 }
