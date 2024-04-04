@@ -43,4 +43,9 @@ export class ServiceController {
   async findOne(@Param('id') id: string) {
     return this.serviceService.findOne(id);
   }
+
+  @Get('/sum')
+  async sum() {
+    return this.serviceService.sum();
+  }
 }

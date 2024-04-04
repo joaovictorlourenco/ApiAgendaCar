@@ -84,8 +84,26 @@ export class ServiceService {
           },
         ],
       },
+      include: {
+        vehicles: true,
+        customers: true,
+      },
     });
 
     return services;
+  }
+
+  async sum() {
+    const services = await this.prisma.services.findMany({
+      select: {
+        value: true,
+      },
+    });
+
+    const sum = services.reduce((acc, service) => {
+      return acc + service.value;
+    }, 0);
+
+    return [services, sum];
   }
 }
